@@ -1,15 +1,20 @@
 <script>
 export default {
   data() {
-    return {}
+    return {
+      menuAktif: 'undangan'
+    }
   },
   computed: {
     currentRouteName() {
-      return this.$route.name;
+      this.menuAktif = this.$route.name
+      console.log(this.$route.name)
+      return this.$route.name
     }
   },
   methods: {
     changeTab(val) {
+      this.menuAktif = val
       this.$router.push("/" + val)
     }
   }
@@ -19,29 +24,29 @@ export default {
 <template>
   <div v-if="currentRouteName !== 'login'">
     <a-layout>
-      <a-layout-header style="background-color: whitesmoke">
+      <a-layout-header :style="{ padding: '0px', position: 'fixed', zIndex: 1, width: '100%', backgroundColor:'white'}">
         <a-row>
-          <a-col :span="8" align="left"><h4>Invitcard</h4></a-col>
+          <a-col :span="8" align="left" class="pl-8"><h4>Invitcard</h4></a-col>
           <a-col :span="8">
             <a-row align="center">
               <a-col>
-                <a-button type="link" block @click="changeTab('undangan')">Undangan</a-button>
+                <a-button :style="[menuAktif === 'undangan' ? { color: '#5B5B5BFF'}: '']" type="link" block @click="changeTab('undangan')">Undangan</a-button>
               </a-col>
               <a-col>
-                <a-button type="link" block @click="changeTab('galeri')">Galeri</a-button>
+                <a-button :style="[menuAktif === 'galeri' ? { color: '#5B5B5BFF'}: '']" type="link" block @click="changeTab('galeri')">Galeri</a-button>
               </a-col>
               <a-col>
-                <a-button type="link" block @click="changeTab('bantuan')">Bantuan</a-button>
+                <a-button :style="[menuAktif === 'bantuan' ? { color: '#5B5B5BFF'}: '']" type="link" block @click="changeTab('bantuan')">Bantuan</a-button>
               </a-col>
             </a-row>
           </a-col>
           <a-col :span="8" align="right">
-            <h4 @click="changeTab('login')" style="cursor: pointer">Logo</h4>
+            <h4 class="pr-8" @click="changeTab('login')" style="cursor: pointer">Logo</h4>
           </a-col>
         </a-row>
+        <hr style="margin-top: -10px; width: 100%" color="whitesmoke"/>
       </a-layout-header>
     </a-layout>
-    <hr/>
   </div>
 </template>
 

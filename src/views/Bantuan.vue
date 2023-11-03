@@ -9,7 +9,7 @@ export default {
 </script>
 
 <template>
-  <div align="center">
-    <h1>Undangan</h1>
+  <div>
+    <a>Bantuan</a>
   </div>
 </template>

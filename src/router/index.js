@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Dashboard from '../views/Dashboard.vue'
-import LoginPage from '../views/auth/Login.vue'
+import Undangan from '@/views/Undangan.vue'
+import LoginPage from '@/views/auth/Login.vue'
+import Galeri from "@/views/Galeri.vue"
+import Bantuan from "@/views/Bantuan.vue"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,8 +14,18 @@ const router = createRouter({
     },
     {
       path: '/undangan',
-      name: 'dashboard',
-      component: Dashboard
+      name: 'undangan',
+      component: Undangan
+    },
+    {
+      path: '/galeri',
+      name: 'galeri',
+      component: Galeri
+    },
+    {
+      path: '/bantuan',
+      name: 'bantuan',
+      component: Bantuan
     }
   ]
 })
