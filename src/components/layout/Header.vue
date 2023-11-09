@@ -41,7 +41,7 @@ export default {
             </a-row>
           </a-col>
           <a-col :span="8" align="right">
-            <h4 class="pr-8" @click="changeTab('login')" style="cursor: pointer">Logo</h4>
+            <h4 class="pr-8" @click="changeTab('')" style="cursor: pointer">Logo</h4>
           </a-col>
         </a-row>
         <hr style="margin-top: -10px; width: 100%" color="whitesmoke"/>
