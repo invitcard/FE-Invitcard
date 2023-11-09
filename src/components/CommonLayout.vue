@@ -18,7 +18,7 @@ export default {
   flex-direction: column;
   height: 100vh;
   overflow: auto;
-  background-color: whitesmoke;
+  //background-color: whitesmoke;
   background-repeat: no-repeat;
   background-position-x: center;
   background-position-y: 110px;

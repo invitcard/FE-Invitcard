@@ -26,7 +26,7 @@ export default {
     <a-layout>
       <a-layout-header :style="{ padding: '0px', position: 'fixed', zIndex: 1, width: '100%', backgroundColor:'white'}">
         <a-row>
-          <a-col :span="8" align="left" class="pl-8"><h4>Invitcard</h4></a-col>
+          <a-col :span="8" align="left" class="pl-8"><h3>Invitcard</h3></a-col>
           <a-col :span="8">
             <a-row align="center">
               <a-col>

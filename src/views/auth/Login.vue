@@ -1,34 +1,36 @@
 <template>
-  <common-layout>
-    <div class="top">
-      <h2>Invitcard</h2>
-      <div class="header">
-        <h1>Login ke Dashboard</h1>
+  <div class="container-login">
+    <common-layout>
+      <div class="top">
+        <h2>Invitcard</h2>
+        <div class="header">
+          <h1>Login ke Dashboard</h1>
+        </div>
+        <div style="margin-bottom: 10px; margin-top: 16px; color: grey">Selamat datang! Silahkan isi email kamu</div>
       </div>
-      <div style="margin-bottom: 10px; margin-top: 16px; color: grey">Selamat datang! Silahkan isi email kamu</div>
-    </div>
-    <div class="login" style="margin-top: 40px">
-      <a-form>
-        <h4>Login Email</h4>
-        <a-form-item>
-            <a-input
-                autocomplete="autocomplete"
-                size="large"
-                placeholder="admin"
-            >
-              <a-icon slot="prefix" type="user" />
-            </a-input>
+      <div class="login" style="margin-top: 40px">
+        <a-form>
+          <h4>Login Email</h4>
+          <a-form-item>
+              <a-input
+                  autocomplete="autocomplete"
+                  size="large"
+                  placeholder="admin"
+              >
+                <a-icon slot="prefix" type="user" />
+              </a-input>
+            </a-form-item>
+          <a-form-item>
+            <a-button @click="loginAkun" :loading="logging" style="width: 100%;margin-top: 4px" size="large" htmlType="submit" type="primary">Login</a-button>
+            <a-button :loading="logging" style="width: 100%;margin-top: 14px" size="large" htmlType="submit" type="primary" ghost>
+              <google-outlined />
+              Login Menggunakan Google
+            </a-button>
           </a-form-item>
-        <a-form-item>
-          <a-button @click="loginAkun" :loading="logging" style="width: 100%;margin-top: 4px" size="large" htmlType="submit" type="primary">Login</a-button>
-          <a-button :loading="logging" style="width: 100%;margin-top: 14px" size="large" htmlType="submit" type="primary" ghost>
-            <google-outlined />
-            Login Menggunakan Google
-          </a-button>
-        </a-form-item>
-      </a-form>
-    </div>
-  </common-layout>
+        </a-form>
+      </div>
+    </common-layout>
+  </div>
 </template>
 
 <script>
@@ -52,6 +54,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
+
+.container-login {
+  margin-top: -100px;
+}
+
 .common-layout{
   .top {
     text-align: center;
