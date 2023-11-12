@@ -1,8 +1,19 @@
 <script>
+import { Dialog, DialogPanel } from '@headlessui/vue'
+import { CloseOutlined, MenuOutlined } from "@ant-design/icons-vue"
+
 export default {
+  components: { MenuOutlined, CloseOutlined, DialogPanel,Dialog },
   data() {
     return {
-      menuAktif: 'undangan'
+      menuAktif: 'undangan',
+      navigation : [
+        { name: 'Undangan', href: '#' },
+        { name: 'Features', href: '#' },
+        { name: 'Marketplace', href: '#' },
+        { name: 'Company', href: '#' },
+      ],
+      mobileMenuOpen: false
     }
   },
   computed: {
@@ -15,6 +26,7 @@ export default {
   methods: {
     changeTab(val) {
       this.menuAktif = val
+      this.mobileMenuOpen = false
       this.$router.push("/" + val)
     }
   }
@@ -23,43 +35,52 @@ export default {
 
 <template>
   <div v-if="currentRouteName !== 'login'">
-    <a-layout>
-      <a-layout-header :style="{ padding: '0px', position: 'fixed', zIndex: 1, width: '100%', backgroundColor:'white'}">
-        <a-row>
-          <a-col :span="8" align="left" class="pl-8"><h3>Invitcard</h3></a-col>
-          <a-col :span="8">
-            <a-row align="center">
-              <a-col>
-                <a-button :style="[menuAktif === 'undangan' ? { color: '#5B5B5BFF'}: '']" type="link" block @click="changeTab('undangan')">Undangan</a-button>
-              </a-col>
-              <a-col>
-                <a-button :style="[menuAktif === 'galeri' ? { color: '#5B5B5BFF'}: '']" type="link" block @click="changeTab('galeri')">Galeri</a-button>
-              </a-col>
-              <a-col>
-                <a-button :style="[menuAktif === 'bantuan' ? { color: '#5B5B5BFF'}: '']" type="link" block @click="changeTab('bantuan')">Bantuan</a-button>
-              </a-col>
-            </a-row>
-          </a-col>
-          <a-col :span="8" align="right">
-            <h4 class="pr-8" @click="changeTab('')" style="cursor: pointer">Logo</h4>
-          </a-col>
-        </a-row>
-        <hr style="margin-top: -10px; width: 100%" color="whitesmoke"/>
-      </a-layout-header>
-    </a-layout>
+    <div class="bg-white">
+      <header class="fixed inset-x-0 top-0 z-50" style="background-color: white">
+        <nav class="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
+          <div class="flex lg:flex-1">
+            <span class="-m-1.5 p-1.5">
+              <h3>Invitcard</h3>
+            </span>
+          </div>
+          <div class="flex lg:hidden">
+            <MenuOutlined class="pb-1.5 pr-1 inline-flex items-center justify-center rounded-md text-gray-700" aria-hidden="true" @click="mobileMenuOpen = true"/>
+          </div>
+          <div class="hidden lg:flex lg:gap-x-12">
+            <a-button :style="[menuAktif === 'undangan' ? { color: '#5B5B5BFF'}: '']" type="link" block @click="changeTab('undangan')">Undangan</a-button>
+            <a-button :style="[menuAktif === 'galeri' ? { color: '#5B5B5BFF'}: '']" type="link" block @click="changeTab('galeri')">Galeri</a-button>
+            <a-button :style="[menuAktif === 'bantuan' ? { color: '#5B5B5BFF'}: '']" type="link" block @click="changeTab('bantuan')">Bantuan</a-button>
+          </div>
+          <div class="hidden lg:flex lg:flex-1 lg:justify-end">
+            <a href="#" class="text-sm font-semibold leading-6 text-gray-900">
+              <a-avatar @click="changeTab('')" style="color: #f56a00; cursor: pointer; background-color: #fde3cf">U</a-avatar>
+            </a>
+          </div>
+        </nav>
+        <Dialog as="div" class="lg:hidden" @close="mobileMenuOpen = false" :open="mobileMenuOpen">
+          <div class="fixed inset-0 z-50" />
+          <DialogPanel class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+            <div class="flex items-center justify-between">
+              <a class="-m-1.5 p-1.5">
+                <h3>Invitcard</h3>
+              </a>
+              <CloseOutlined class="h-6 w-6" aria-hidden="true" @click="mobileMenuOpen = false"/>
+            </div>
+            <div class="mt-6 flow-root">
+              <div class="-my-6 divide-y divide-gray-500/10">
+                <div class="space-y-2 py-6">
+                  <a :style="[menuAktif === 'undangan' ? { color: '#5B5B5BFF'}: { color: '#008ffc'}]" @click="changeTab('undangan')">Undangan</a>
+                  <p :style="[menuAktif === 'galeri' ? { color: '#5B5B5BFF'}: { color: '#008ffc'}]" @click="changeTab('galeri')">Galeri</p>
+                  <p :style="[menuAktif === 'bantuan' ? { color: '#5B5B5BFF'}: { color: '#008ffc'}]" @click="changeTab('bantuan')">Bantuan</p>
+                </div>
+                <div class="py-6">
+                  <a @click="changeTab('')" class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Log Out</a>
+                </div>
+              </div>
+            </div>
+          </DialogPanel>
+        </Dialog>
+      </header>
+    </div>
   </div>
 </template>
-
-<style scoped>
-#components-layout-demo-fixed .logo {
-  width: 120px;
-  height: 31px;
-  background: rgba(255, 255, 255, 0.2);
-  margin: 16px 24px 16px 0;
-  float: left;
-}
-
-[data-theme='dark'] .site-layout .site-layout-background {
-  background: #141414;
-}
-</style>

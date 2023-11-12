@@ -5,7 +5,7 @@ import HeaderLayout from './components/layout/Header.vue'
 
 <template>
   <HeaderLayout/>
-  <div style="margin-left:100px; margin-right: 100px; margin-top: 100px">
+  <div class="sm:mt-24 sm:mx-24 lg:mx-24 lg:mt-24">
     <RouterView/>
   </div>
 </template>
