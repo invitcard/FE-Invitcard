@@ -7,6 +7,7 @@ import {
   SettingOutlined,
   EyeOutlined,
   CheckCircleFilled,
+  PushpinOutlined,
   GlobalOutlined, DownOutlined
 } from "@ant-design/icons-vue"
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue"
@@ -17,6 +18,7 @@ export default {
     DisclosureButton,
     DisclosurePanel,
     DownOutlined,
+    PushpinOutlined,
     GlobalOutlined, CheckCircleFilled, EyeOutlined, EllipsisOutlined, MinusCircleOutlined, PlusOutlined, SettingOutlined, EditOutlined, CheckCircleOutlined},
   data() {
     return {
@@ -33,7 +35,7 @@ export default {
         },
       },
       loading: false,
-      valueProggress: 20,
+      valueProggress: 0,
       judulUndangan: 'Wedding Day Romeo and Juliet',
       statusValidate: 'success',
       products : [
@@ -78,7 +80,13 @@ export default {
           price: '$35',
           color: 'Black',
         }
-      ]
+      ],
+      timeZones: ['WIB', 'WITA', 'WIT'],
+      eWallets: ['M-Banking', 'E-Wallet'],
+      eWallet: 'M-Banking',
+      timeZone: 'WIB',
+      dataKalimatPenutup: 'Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila saudara saudari berkenan untuk bergabung secara virtual serta memberikan doa restu untuk mengiri niat tulus kami, sehingga prosesi akad nikah berjalan khidmat dan lancar',
+      dataKeterangan: '"Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang. Sungguh, pada yang demikian itu benar-benar terdapat tanda-tanda (kebesaran Allah) bagi kaum yang berpikir." (QS Ar-Rum:21).'
     }
   },
   methods: {
@@ -88,9 +96,12 @@ export default {
     },
     formSelanjutnya () {
       this.inputData = this.inputData + 1
-      if (this.inputData === 3) {
+      if (this.inputData === 6) {
         this.openCreate = false;
       }
+    },
+    formSebelumnya () {
+      this.inputData = this.inputData - 1
     },
     handleCancel () {
       this.open = false;
@@ -112,13 +123,8 @@ export default {
 
 <template>
   <div class="bg-white">
-    <a-row>
-      <a-col :span="8">
-        <h2>Galeri Undangan</h2>
-      </a-col>
-    </a-row>
-    <div class="mx-auto lg:max-w-7xl">
-      <div class="mt-3.5 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+    <div class="mx-auto lg:max-w-7xl min-[320px]:mt-20">
+      <div class="mt-3.5 grid grid-cols-1 gap-x-6 gap-y-10 justify-items-center sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
         <div v-for="index in 8" :key="index" class="group relative">
           <div class="mt-4 flex justify-between">
             <a-card hoverable style="width: 300px">
@@ -175,7 +181,7 @@ export default {
           </div>
           <div style="margin: 30px; width: 90%; bottom: 0px; position: absolute">
             <h4>langkah 1 dari 5</h4>
-            <a-progress :percent="valueProggress" />
+            <a-progress :percent="valueProggress + 20" />
           </div>
         </a-col>
         <a-col :span="12">
@@ -252,7 +258,7 @@ export default {
           </div>
           <div style="margin: 30px; width: 90%; bottom: 0px; position: absolute">
             <h4>langkah 2 dari 5</h4>
-            <a-progress :percent="valueProggress + 20" />
+            <a-progress :percent="valueProggress + 40" />
           </div>
         </a-col>
         <a-col :span="12">
@@ -265,7 +271,282 @@ export default {
                 <DownOutlined style="margin-top: 3px" :class="open ? 'rotate-180 transform' : ''"/>
               </DisclosureButton>
               <DisclosurePanel class="px-4 pt-4 pb-2 text-sm text-gray-500">
-                <h1>Kata Pengantar</h1>
+                <a-form
+                    layout="horizontal"
+                    :wrapper-col="wrapperCol"
+                    style="max-width: 100%"
+                    :label-col="labelCol"
+                >
+                  <div class="grid grid-cols-6 gap-4 mb-4">
+                    <div class="col-start-1 col-end-6 self-center">
+                      <span>Pilih atau Sesuaikan Kata Pengantar</span>
+                    </div>
+                    <div class="col-end-10 col-span-2 ...">
+                      <a-button>Pilih Ucapan</a-button>
+                    </div>
+                  </div>
+                  <a-textarea style="min-height: 120px" v-model:value="dataKeterangan" />
+                </a-form>
+              </DisclosurePanel>
+            </Disclosure>
+            <Disclosure as="div" class="mt-2" v-slot="{ open }">
+              <DisclosureButton
+                  class="border-0 flex w-full justify-between rounded-lg px-4 py-2 text-left text-sm font-medium hover:bg-blue-100"
+              >
+                <span>Cerita Kami</span>
+                <DownOutlined style="margin-top: 3px" :class="open ? 'rotate-180 transform' : ''"/>
+              </DisclosureButton>
+              <DisclosurePanel class="px-4 pt-4 pb-2 text-sm text-gray-500">
+                <a-form
+                    layout="horizontal"
+                    :wrapper-col="wrapperCol"
+                    style="max-width: 100%"
+                    :label-col="labelCol"
+                >
+                  <a-form-item label="Judul Cerita">
+                    <a-input />
+                  </a-form-item>
+                  <a-form-item label="Deskripsi Cerita">
+                    <a-textarea style="min-height: 120px" v-model:value="dataKeterangan" />
+                  </a-form-item>
+                  <a-form-item label="Foto Kenangan">
+                    <a-upload action="/upload.do" list-type="picture-card">
+                      <div>
+                        <PlusOutlined />
+                        <div style="margin-top: 8px">Upload</div>
+                      </div>
+                    </a-upload>
+                  </a-form-item>
+                </a-form>
+                <a-button>Tambah Cerita</a-button>
+              </DisclosurePanel>
+            </Disclosure>
+            <Disclosure as="div" class="mt-2" v-slot="{ open }">
+              <DisclosureButton
+                  class="border-0 flex w-full justify-between rounded-lg px-4 py-2 text-left text-sm font-medium hover:bg-blue-100"
+              >
+                <span>Galeri Foto</span>
+                <DownOutlined style="margin-top: 3px" :class="open ? 'rotate-180 transform' : ''"/>
+              </DisclosureButton>
+              <DisclosurePanel class="px-4 pt-4 pb-2 text-sm text-gray-500">
+                <a-form
+                    layout="horizontal"
+                    :wrapper-col="wrapperCol"
+                    style="max-width: 100%"
+                    :label-col="labelCol"
+                >
+                  <a-upload action="/upload.do" list-type="picture-card">
+                    <div>
+                      <PlusOutlined />
+                      <div style="margin-top: 8px">Tambah Foto</div>
+                    </div>
+                  </a-upload>
+                </a-form>
+              </DisclosurePanel>
+            </Disclosure>
+          </div>
+        </a-col>
+      </a-row>
+      <a-row v-if="inputData === 3" style="min-height: 500px">
+        <a-col :span="12" style="background-color: whitesmoke; border-radius: 10px">
+          <div style="margin-left: 40px; margin-top: 10px">
+            <p style="font-size: 50px">Sususan Acara</p>
+          </div>
+          <div style="margin: 30px; width: 90%; bottom: 0px; position: absolute">
+            <h4>langkah 3 dari 5</h4>
+            <a-progress :percent="valueProggress + 60" />
+          </div>
+        </a-col>
+        <a-col :span="12">
+          <div class="ml-3">
+            <Disclosure as="div" class="mt-2" v-slot="{ open }">
+              <DisclosureButton
+                  class="border-0 flex w-full justify-between rounded-lg px-4 py-2 text-left text-sm font-medium hover:bg-blue-100"
+              >
+                <span>Susunan Acara 1 (Utama)</span>
+                <DownOutlined style="margin-top: 3px" :class="open ? 'rotate-180 transform' : ''"/>
+              </DisclosureButton>
+              <DisclosurePanel class="px-4 pt-4 pb-2 text-sm text-gray-500">
+                <a-form
+                    layout="horizontal"
+                    :wrapper-col="wrapperCol"
+                    style="max-width: 100%"
+                    :label-col="labelCol"
+                >
+                  <a-form-item label="Judul Acara"><a-input /></a-form-item>
+                  <a-form-item label="Tanggal Acara" has-feedback>
+                    <a-date-picker placeholder="Pilih Tanggal" style="width: 100%" />
+                  </a-form-item>
+                  <a-form-item label="Waktu Acara" has-feedback>
+                    <a-time-picker use12-hours format="h:mm a" class="mr-10"/>
+                    <a-radio-group v-model:value="timeZone" :options="timeZones" />
+                  </a-form-item>
+                  <a-form-item label="Alamat">
+                    <a-textarea />
+                  </a-form-item>
+                  <a-form-item label="Google Map">
+                    <a-input placeholder="Map">
+                      <template #suffix>
+                        <PushpinOutlined style="color: rgba(0, 0, 0, 0.45)" />
+                      </template>
+                    </a-input>
+                  </a-form-item>
+                </a-form>
+              </DisclosurePanel>
+            </Disclosure>
+            <Disclosure as="div" class="mt-2" v-slot="{ open }">
+              <DisclosureButton
+                  class="border-0 flex w-full justify-between rounded-lg px-4 py-2 text-left text-sm font-medium hover:bg-blue-100"
+              >
+                <span>Susunan Acara 2 (Optional)</span>
+                <DownOutlined style="margin-top: 3px" :class="open ? 'rotate-180 transform' : ''"/>
+              </DisclosureButton>
+              <DisclosurePanel class="px-4 pt-4 pb-2 text-sm text-gray-500">
+                <a-form
+                    layout="horizontal"
+                    :wrapper-col="wrapperCol"
+                    style="max-width: 100%"
+                    :label-col="labelCol"
+                >
+                  <a-form-item label="Judul Acara"><a-input /></a-form-item>
+                  <a-form-item label="Tanggal Acara" has-feedback>
+                    <a-date-picker placeholder="Pilih Tanggal" style="width: 100%" />
+                  </a-form-item>
+                  <a-form-item label="Waktu Acara" has-feedback>
+                    <a-time-picker use12-hours format="h:mm a" class="mr-10"/>
+                    <a-radio-group v-model:value="timeZone" :options="timeZones" />
+                  </a-form-item>
+                  <a-form-item label="Alamat">
+                    <a-textarea /><br/>
+                    <a-checkbox class="mt-2">Sama Dengan Acara Utama</a-checkbox>
+                  </a-form-item>
+                  <a-form-item label="Google Map">
+                    <a-input placeholder="Map">
+                      <template #suffix>
+                        <PushpinOutlined style="color: rgba(0, 0, 0, 0.45)" />
+                      </template>
+                    </a-input>
+                  </a-form-item>
+                </a-form>
+              </DisclosurePanel>
+            </Disclosure>
+            <a-button class="mt-2">Tambah Acara</a-button>
+          </div>
+        </a-col>
+      </a-row>
+      <a-row v-if="inputData === 4" style="min-height: 500px">
+        <a-col :span="12" style="background-color: whitesmoke; border-radius: 10px">
+          <div style="margin-left: 40px; margin-top: 10px">
+            <p style="font-size: 50px">Tamu Spesial,<br/> Pengisi Acara,<br/>Pengiring Pengantin</p>
+          </div>
+          <div style="margin: 30px; width: 90%; bottom: 0px; position: absolute">
+            <h4>langkah 4 dari 5</h4>
+            <a-progress :percent="valueProggress + 80" />
+          </div>
+        </a-col>
+        <a-col :span="12">
+          <div class="ml-3">
+            <Disclosure as="div" class="mt-2" v-slot="{ open }">
+              <DisclosureButton
+                  class="border-0 flex w-full justify-between rounded-lg px-4 py-2 text-left text-sm font-medium hover:bg-blue-100"
+              >
+                <span>Tamu Spesial</span>
+                <DownOutlined style="margin-top: 3px" :class="open ? 'rotate-180 transform' : ''"/>
+              </DisclosureButton>
+              <DisclosurePanel class="px-4 pt-4 pb-2 text-sm text-gray-500">
+                <a-form
+                    layout="horizontal"
+                    :wrapper-col="wrapperCol"
+                    style="max-width: 100%"
+                    :label-col="labelCol"
+                >
+                  <h3>Lorem ipsum doler</h3>
+                </a-form>
+              </DisclosurePanel>
+            </Disclosure>
+            <a-button class="mt-2">Tambah Acara</a-button>
+          </div>
+        </a-col>
+      </a-row>
+      <a-row v-if="inputData === 5" style="min-height: 500px">
+        <a-col :span="12" style="background-color: whitesmoke; border-radius: 10px">
+          <div style="margin-left: 40px; margin-top: 10px">
+            <p style="font-size: 50px">Kalimat Penutup,<br/> Hadiah & E-Wallet</p>
+          </div>
+          <div style="margin: 30px; width: 90%; bottom: 0px; position: absolute">
+            <h4>langkah 5 dari 5</h4>
+            <a-progress :percent="valueProggress + 100" />
+          </div>
+        </a-col>
+        <a-col :span="12">
+          <div class="ml-3">
+            <Disclosure as="div" class="mt-2" v-slot="{ open }">
+              <DisclosureButton
+                  class="border-0 flex w-full justify-between rounded-lg px-4 py-2 text-left text-sm font-medium hover:bg-blue-100"
+              >
+                <span>Kalimat Penutup</span>
+                <DownOutlined style="margin-top: 3px" :class="open ? 'rotate-180 transform' : ''"/>
+              </DisclosureButton>
+              <DisclosurePanel class="px-4 pt-4 pb-2 text-sm text-gray-500">
+                <a-form
+                    layout="horizontal"
+                    :wrapper-col="wrapperCol"
+                    style="max-width: 100%"
+                    :label-col="labelCol"
+                >
+                  <div class="grid grid-cols-6 gap-4 mb-4">
+                    <div class="col-start-1 col-end-6 self-center">
+                      <span>Pilih atau Sesuaikan Kata Pengantar</span>
+                    </div>
+                    <div class="col-end-10 col-span-2 ...">
+                      <a-button>Pilih Ucapan</a-button>
+                    </div>
+                  </div>
+                  <a-textarea style="min-height: 80px" v-model:value="dataKalimatPenutup" />
+                </a-form>
+              </DisclosurePanel>
+            </Disclosure>
+            <Disclosure as="div" class="mt-2" v-slot="{ open }">
+              <DisclosureButton
+                  class="border-0 flex w-full justify-between rounded-lg px-4 py-2 text-left text-sm font-medium hover:bg-blue-100"
+              >
+                <span>Pengiriman Hadiah</span>
+                <DownOutlined style="margin-top: 3px" :class="open ? 'rotate-180 transform' : ''"/>
+              </DisclosureButton>
+              <DisclosurePanel class="px-4 pt-4 pb-2 text-sm text-gray-500">
+                <a-form
+                    layout="horizontal"
+                    :wrapper-col="wrapperCol"
+                    style="max-width: 100%"
+                    :label-col="labelCol"
+                >
+                  <a-form-item label="Nama Alamat"><a-input /></a-form-item>
+                  <a-form-item label="Alamat"><a-textarea /></a-form-item>
+                </a-form>
+              </DisclosurePanel>
+            </Disclosure>
+            <Disclosure as="div" class="mt-2" v-slot="{ open }">
+              <DisclosureButton
+                  class="border-0 flex w-full justify-between rounded-lg px-4 py-2 text-left text-sm font-medium hover:bg-blue-100"
+              >
+                <span>E-Wallet</span>
+                <DownOutlined style="margin-top: 3px" :class="open ? 'rotate-180 transform' : ''"/>
+              </DisclosureButton>
+              <DisclosurePanel class="px-4 pt-4 pb-2 text-sm text-gray-500">
+                <a-form
+                    layout="horizontal"
+                    :wrapper-col="wrapperCol"
+                    style="max-width: 100%"
+                    :label-col="labelCol"
+                >
+                  <a-form-item label="Jenis Layanan" has-feedback>
+                    <a-radio-group v-model:value="eWallet" :options="eWallets" />
+                  </a-form-item>
+                  <a-form-item label="Penyedia"><a-input /></a-form-item>
+                  <a-form-item label="Nama Akun"><a-input /></a-form-item>
+                  <a-form-item label="No Rekening"><a-input type="number" /></a-form-item>
+                </a-form>
+                <a-button>Tambah E-Wallet</a-button>
               </DisclosurePanel>
             </Disclosure>
           </div>
@@ -273,8 +554,10 @@ export default {
       </a-row>
       <hr style="margin-top: 10px; width: 100%" color="whitesmoke"/>
       <template #footer>
+        <a-button key="back" v-if="inputData > 1" @click="formSebelumnya" type="link">Sebelumnya</a-button>
         <a-button key="back" @click="handleCancel" type="link">Simpan dan Lewati</a-button>
-        <a-button key="submit" type="primary" :loading="loading" @click="formSelanjutnya">Selanjutnya</a-button>
+        <a-button key="submit" v-if="inputData < 5" type="primary" :loading="loading" @click="formSelanjutnya">Selanjutnya</a-button>
+        <a-button key="submit" v-if="inputData === 5" type="primary" :loading="loading" @click="formSelanjutnya">Selesai</a-button>
       </template>
     </a-modal>
   </div>

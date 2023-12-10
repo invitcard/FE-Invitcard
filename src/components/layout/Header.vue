@@ -1,6 +1,7 @@
 <script>
 import { Dialog, DialogPanel } from '@headlessui/vue'
 import { CloseOutlined, MenuOutlined } from "@ant-design/icons-vue"
+import { googleLogout } from "vue3-google-login"
 
 export default {
   components: { MenuOutlined, CloseOutlined, DialogPanel,Dialog },
@@ -25,6 +26,7 @@ export default {
   },
   methods: {
     changeTab(val) {
+      googleLogout()
       this.menuAktif = val
       this.mobileMenuOpen = false
       this.$router.push("/" + val)

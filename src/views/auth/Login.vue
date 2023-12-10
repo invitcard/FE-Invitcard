@@ -22,10 +22,12 @@
             </a-form-item>
           <a-form-item>
             <a-button @click="loginAkun" :loading="logging" style="width: 100%;margin-top: 4px" size="large" htmlType="submit" type="primary">Login</a-button>
-            <a-button :loading="logging" style="width: 100%;margin-top: 14px" size="large" htmlType="submit" type="primary" ghost>
-              <google-outlined />
-              Login Menggunakan Google
-            </a-button>
+            <GoogleLogin style="width: 100%" :callback="callback" prompt>
+              <a-button :loading="logging" style="width: 100%;margin-top: 14px" size="large" htmlType="submit" type="primary" ghost>
+                <google-outlined />
+                Login Menggunakan Google
+              </a-button>
+            </GoogleLogin>
           </a-form-item>
         </a-form>
       </div>
@@ -36,18 +38,48 @@
 <script>
 import CommonLayout from '@/components/CommonLayout.vue'
 import { GoogleOutlined } from '@ant-design/icons-vue';
+import { GoogleLogin ,decodeCredential } from "vue3-google-login"
+import Axios from 'axios'
+
 export default {
   name: 'Login',
-  components: {CommonLayout, GoogleOutlined},
+  components: {CommonLayout, GoogleOutlined, GoogleLogin},
   data () {
     return {
       logging: false,
       error: '',
+      user: '',
+      callback: (res) => {
+        console.log('handle res : ', res)
+        this.user = decodeCredential(res.credential)
+        this.loginAkun()
+        console.log("Handle the userData", this.user)
+      }
     }
   },
   methods: {
-    loginAkun() {
-      this.$router.push("/undangan")
+    async loginAkun() {
+      let param = {
+        user_email: 'tes@gmail.com',
+        user_name: 'tes',
+        token_id: 'asdasdka2wq23eaw',
+        photo_profil: 'tes_gambar'
+      }
+
+
+      Axios.post('https://invitcard.com/be/api/login', param, {
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        }
+      }).then((response) => {
+        console.log(response);
+      }).catch((error) => {
+        console.log(error);
+      });
+
+      if (this.user) {
+        this.$router.push("/undangan")
+      }
     }
   }
 }
