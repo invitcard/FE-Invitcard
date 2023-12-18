@@ -55,7 +55,7 @@ export default {
           </div>
           <div class="hidden lg:flex lg:flex-1 lg:justify-end">
             <a href="#" class="text-sm font-semibold leading-6 text-gray-900">
-              <a-avatar @click="changeTab('')" style="color: #f56a00; cursor: pointer; background-color: #fde3cf">U</a-avatar>
+              <a-avatar src="https://www.antdv.com/assets/logo.1ef800a8.svg" @click="changeTab('')" style=" cursor: pointer"/>
             </a>
           </div>
         </nav>

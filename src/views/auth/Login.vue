@@ -59,18 +59,16 @@ export default {
   },
   methods: {
     async loginAkun() {
+      const appApi = import.meta.env.VITE_APP_API
       let param = {
-        user_email: 'tes@gmail.com',
-        user_name: 'tes',
-        token_id: 'asdasdka2wq23eaw',
-        photo_profil: 'tes_gambar'
+        user_email: this.user.email,
+        user_name: this.user.name,
+        token_id: this.user.aud,
+        photo_profil: this.user.picture
       }
 
-
-      Axios.post('https://invitcard.com/be/api/login', param, {
-        headers: {
-          'Access-Control-Allow-Origin': '*'
-        }
+      Axios.post(appApi+'be/api/login', param, {
+        headers: { 'Access-Control-Allow-Origin': '*' }
       }).then((response) => {
         console.log(response);
       }).catch((error) => {
