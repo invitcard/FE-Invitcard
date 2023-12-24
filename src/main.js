@@ -10,6 +10,7 @@ import Vue3GoogleLogin from 'vue3-google-login'
 
 import App from './App.vue'
 import router from './router'
+import 'animate.css'
 
 const gauthClientId = '445041650052-1geuvshnb3il1g3cmhbf4euthsjg1bhb.apps.googleusercontent.com'
 

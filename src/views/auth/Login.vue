@@ -2,7 +2,9 @@
   <div class="container-login">
     <common-layout>
       <div class="top">
-        <h2>Invitcard</h2>
+        <div class="pb-4">
+          <img src="../../assets/LogoLabel.png" height="25" width="138"/>
+        </div>
         <div class="header">
           <h1>Login ke Dashboard</h1>
         </div>
@@ -67,7 +69,7 @@ export default {
         photo_profil: this.user.picture
       }
 
-      Axios.post(appApi+'be/api/login', param, {
+      Axios.post(appApi + 'be/api/login', param, {
         headers: { 'Access-Control-Allow-Origin': '*' }
       }).then((response) => {
         console.log(response);

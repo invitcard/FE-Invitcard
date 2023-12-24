@@ -5,13 +5,14 @@
   "scripts": {
     "dev": "vite --mode development",
     "prod": "vite --mode production",
-    "build": "vite build",
+    "build": "vite build --mode production",
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
   },
   "dependencies": {
     "@ant-design/icons-vue": "^7.0.1",
     "@headlessui/vue": "^1.7.16",
+    "animate.css": "^4.1.1",
     "ant-design-vue": "^4.0.6",
     "axios": "^1.6.2",
     "pinia": "^2.1.7",

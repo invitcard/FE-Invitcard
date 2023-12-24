@@ -11,6 +11,7 @@ import {
   GlobalOutlined, DownOutlined
 } from "@ant-design/icons-vue"
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue"
+import Axios from "axios"
 
 export default {
   components: {
@@ -22,7 +23,7 @@ export default {
     GlobalOutlined, CheckCircleFilled, EyeOutlined, EllipsisOutlined, MinusCircleOutlined, PlusOutlined, SettingOutlined, EditOutlined, CheckCircleOutlined},
   data() {
     return {
-      data: '',
+      invitId: '',
       open: false,
       inputData: 1,
       openCreate: false,
@@ -36,51 +37,18 @@ export default {
       },
       loading: false,
       valueProggress: 0,
-      judulUndangan: 'Wedding Day Romeo and Juliet',
+      judulUndangan: '',
       statusValidate: 'success',
-      products : [
-        {
-          id: 1,
-          name: 'Basic Tee',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-          imageAlt: "Front of men's Basic Tee in black.",
-          price: '$35',
-          color: 'Black',
-        },{
-          id: 1,
-          name: 'Basic Tee',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-          imageAlt: "Front of men's Basic Tee in black.",
-          price: '$35',
-          color: 'Black',
-        },{
-          id: 1,
-          name: 'Basic Tee',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-          imageAlt: "Front of men's Basic Tee in black.",
-          price: '$35',
-          color: 'Black',
-        },{
-          id: 1,
-          name: 'Basic Tee',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-          imageAlt: "Front of men's Basic Tee in black.",
-          price: '$35',
-          color: 'Black',
-        },{
-          id: 1,
-          name: 'Basic Tee',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-          imageAlt: "Front of men's Basic Tee in black.",
-          price: '$35',
-          color: 'Black',
-        }
-      ],
+    // {
+    //   id: 1,
+    //       name: 'Basic Tee',
+    //       href: '#',
+    //       imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
+    //       imageAlt: "Front of men's Basic Tee in black.",
+    //       price: '$35',
+    //       color: 'Black',
+    // },
+      products : [],
       timeZones: ['WIB', 'WITA', 'WIT'],
       eWallets: ['M-Banking', 'E-Wallet'],
       eWallet: 'M-Banking',
@@ -89,8 +57,23 @@ export default {
       dataKeterangan: '"Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang. Sungguh, pada yang demikian itu benar-benar terdapat tanda-tanda (kebesaran Allah) bagi kaum yang berpikir." (QS Ar-Rum:21).'
     }
   },
+  created() {
+    this.getListData()
+  },
   methods: {
-    showModal () {
+    async getListData() {
+      const appApi = import.meta.env.VITE_APP_API
+      await Axios.get(appApi + 'be/api/theme', {
+        headers: { 'Access-Control-Allow-Origin': '*' }
+      }).then((response) => {
+        this.products = response.data.data
+        console.log(response.data.data);
+      }).catch((error) => {
+        console.log(error);
+      });
+    },
+    showModal (id) {
+      this.invitId = id
       this.open = true;
       this.inputData = 1
     },
@@ -125,18 +108,18 @@ export default {
   <div class="bg-white">
     <div class="mx-auto lg:max-w-7xl min-[320px]:mt-20">
       <div class="mt-3.5 grid grid-cols-1 gap-x-6 gap-y-10 justify-items-center sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-        <div v-for="index in 8" :key="index" class="group relative">
+        <div v-for="(product, index) in products" :key="index" class="group relative">
           <div class="mt-4 flex justify-between">
-            <a-card hoverable style="width: 300px">
+            <a-card class="animate__animated animate__fadeInLeft" hoverable style="width: 300px">
               <template #cover>
-                <img alt="example" src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"/>
+                <img alt="example" height="170" :src="product.thumbnail"/>
               </template>
               <template #actions>
                 <a-tooltip placement="bottom" color="#108ee9">
                   <template #title>
                     <span>Pilih Udangan</span>
                   </template>
-                  <PlusOutlined @click="showModal" key="pilihUdangan"/>
+                  <PlusOutlined @click="showModal(product.invit_id)" key="pilihUdangan"/>
                 </a-tooltip>
                 <a-tooltip placement="bottom" color="#108ee9">
                   <template #title>
@@ -146,7 +129,7 @@ export default {
                 </a-tooltip>
               </template>
               <a-card-meta >
-                <template #description>Judul Undangan</template>
+                <template #description>{{ product.theme_name }}</template>
               </a-card-meta>
             </a-card>
           </div>

@@ -42,16 +42,16 @@ export default {
         <nav class="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
           <div class="flex lg:flex-1">
             <span class="-m-1.5 p-1.5">
-              <h3>Invitcard</h3>
+              <img src="../../assets/LogoLabel.png" height="20" width="116"/>
             </span>
           </div>
           <div class="flex lg:hidden">
             <MenuOutlined class="pb-1.5 pr-1 inline-flex items-center justify-center rounded-md text-gray-700" aria-hidden="true" @click="mobileMenuOpen = true"/>
           </div>
           <div class="hidden lg:flex lg:gap-x-12">
-            <a-button :style="[menuAktif === 'undangan' ? { color: '#5B5B5BFF'}: '']" type="link" block @click="changeTab('undangan')">Undangan</a-button>
-            <a-button :style="[menuAktif === 'galeri' ? { color: '#5B5B5BFF'}: '']" type="link" block @click="changeTab('galeri')">Galeri</a-button>
-            <a-button :style="[menuAktif === 'bantuan' ? { color: '#5B5B5BFF'}: '']" type="link" block @click="changeTab('bantuan')">Bantuan</a-button>
+            <a-button :style="[menuAktif === 'undangan' ? { color: '#1b6fec', borderBottomColor: '#1b6fec', borderRadius: '0px'}: { color: '#464748'}]" type="link" block @click="changeTab('undangan')">Undangan</a-button>
+            <a-button :style="[menuAktif === 'galeri' ? { color: '#1b6fec', borderBottomColor: '#1b6fec', borderRadius: '0px'}: { color: '#464748'}]" type="link" block @click="changeTab('galeri')">Galeri</a-button>
+            <a-button :style="[menuAktif === 'bantuan' ? { color: '#1b6fec', borderBottomColor: '#1b6fec', borderRadius: '0px'}: { color: '#464748'}]" type="link" block @click="changeTab('bantuan')">Bantuan</a-button>
           </div>
           <div class="hidden lg:flex lg:flex-1 lg:justify-end">
             <a href="#" class="text-sm font-semibold leading-6 text-gray-900">
