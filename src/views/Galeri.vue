@@ -12,15 +12,22 @@ import {
 } from "@ant-design/icons-vue"
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue"
 import Axios from "axios"
+import { useGaleriStore } from "@/stores/galeri"
 
 export default {
   components: {
-    Disclosure,
-    DisclosureButton,
-    DisclosurePanel,
-    DownOutlined,
-    PushpinOutlined,
-    GlobalOutlined, CheckCircleFilled, EyeOutlined, EllipsisOutlined, MinusCircleOutlined, PlusOutlined, SettingOutlined, EditOutlined, CheckCircleOutlined},
+    Disclosure, DisclosureButton,
+    DisclosurePanel, DownOutlined,
+    PushpinOutlined, GlobalOutlined,
+    CheckCircleFilled, EyeOutlined,
+    EllipsisOutlined, CheckCircleOutlined,
+    MinusCircleOutlined, PlusOutlined,
+    SettingOutlined, EditOutlined
+  },
+  setup () {
+    const galeriStore = useGaleriStore()
+    return { galeriStore }
+  },
   data() {
     return {
       invitId: '',
@@ -37,18 +44,9 @@ export default {
       },
       loading: false,
       valueProggress: 0,
+      pathUndangan: 'invitcard.com',
       judulUndangan: '',
       statusValidate: 'success',
-    // {
-    //   id: 1,
-    //       name: 'Basic Tee',
-    //       href: '#',
-    //       imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-    //       imageAlt: "Front of men's Basic Tee in black.",
-    //       price: '$35',
-    //       color: 'Black',
-    // },
-      products : [],
       timeZones: ['WIB', 'WITA', 'WIT'],
       eWallets: ['M-Banking', 'E-Wallet'],
       eWallet: 'M-Banking',
@@ -57,20 +55,21 @@ export default {
       dataKeterangan: '"Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang. Sungguh, pada yang demikian itu benar-benar terdapat tanda-tanda (kebesaran Allah) bagi kaum yang berpikir." (QS Ar-Rum:21).'
     }
   },
+  watch: {
+    judulUndangan() {
+      if (this.judulUndangan.length === 0 ) {
+        this.pathUndangan = 'invitcard.com'
+      } else {
+        this.pathUndangan = 'invitcard.com/'+ this.judulUndangan.replace(/ /g,'_')
+      }
+    }
+  },
   created() {
     this.getListData()
   },
   methods: {
     async getListData() {
-      const appApi = import.meta.env.VITE_APP_API
-      await Axios.get(appApi + 'be/api/theme', {
-        headers: { 'Access-Control-Allow-Origin': '*' }
-      }).then((response) => {
-        this.products = response.data.data
-        console.log(response.data.data);
-      }).catch((error) => {
-        console.log(error);
-      });
+      await this.galeriStore.getListData()
     },
     showModal (id) {
       this.invitId = id
@@ -108,9 +107,9 @@ export default {
   <div class="bg-white">
     <div class="mx-auto lg:max-w-7xl min-[320px]:mt-20">
       <div class="mt-3.5 grid grid-cols-1 gap-x-6 gap-y-10 justify-items-center sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-        <div v-for="(product, index) in products" :key="index" class="group relative">
+        <div v-for="(product, index) in galeriStore.products" :key="index" class="group relative">
           <div class="mt-4 flex justify-between">
-            <a-card class="animate__animated animate__fadeInLeft" hoverable style="width: 300px">
+            <a-card class="animate__animated animate__fadeInUp" hoverable style="width: 270px">
               <template #cover>
                 <img alt="example" height="170" :src="product.thumbnail"/>
               </template>
@@ -147,12 +146,12 @@ export default {
           <GlobalOutlined />
         </a-col>
         <a-col style="margin-top: 12px">
-          <p>invitcard.com/wedding+day+romeo+juliet</p>
+          <p>{{ pathUndangan }}</p>
         </a-col>
       </a-row>
       <hr style="margin-top: 10px; width: 100%" color="whitesmoke"/>
       <template #footer>
-        <a-button key="submit" type="primary" :loading="loading" @click="handleOk">Buat Undangan</a-button>
+        <a-button :disabled="this.judulUndangan.length === 0" key="submit" type="primary" :loading="loading" @click="handleOk">Buat Undangan</a-button>
       </template>
     </a-modal>
     <a-modal v-model:open="openCreate" title="Wedding Day Romeo and Juliet" width="1300px">

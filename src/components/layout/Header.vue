@@ -2,9 +2,14 @@
 import { Dialog, DialogPanel } from '@headlessui/vue'
 import { CloseOutlined, MenuOutlined } from "@ant-design/icons-vue"
 import { googleLogout } from "vue3-google-login"
+import { useAuthStore } from "@/stores/auth"
 
 export default {
   components: { MenuOutlined, CloseOutlined, DialogPanel,Dialog },
+  setup () {
+    const authStore = useAuthStore()
+    return { authStore }
+  },
   data() {
     return {
       menuAktif: 'undangan',
@@ -26,17 +31,24 @@ export default {
   },
   methods: {
     changeTab(val) {
-      googleLogout()
-      this.menuAktif = val
-      this.mobileMenuOpen = false
-      this.$router.push("/" + val)
+      if (val === '') {
+        googleLogout()
+        this.authStore.logout()
+        this.menuAktif = val
+        this.mobileMenuOpen = false
+        this.$router.push("/" + val)
+      } else {
+        this.menuAktif = val
+        this.mobileMenuOpen = false
+        this.$router.push("/" + val)
+      }
     }
   }
 }
 </script>
 
 <template>
-  <div v-if="currentRouteName !== 'login'">
+  <div v-if="currentRouteName !== 'login' && currentRouteName !== 'register' && currentRouteName !== 'verifikasiEmail' ">
     <div class="bg-white">
       <header class="fixed inset-x-0 top-0 z-50" style="background-color: white">
         <nav class="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
@@ -54,8 +66,13 @@ export default {
             <a-button :style="[menuAktif === 'bantuan' ? { color: '#1b6fec', borderBottomColor: '#1b6fec', borderRadius: '0px'}: { color: '#464748'}]" type="link" block @click="changeTab('bantuan')">Bantuan</a-button>
           </div>
           <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="#" class="text-sm font-semibold leading-6 text-gray-900">
-              <a-avatar src="https://www.antdv.com/assets/logo.1ef800a8.svg" @click="changeTab('')" style=" cursor: pointer"/>
+            <a @click="changeTab('')" class="text-sm font-semibold leading-6 text-gray-900">
+              <img v-if="authStore.photoProfil"
+                  :width="30"
+                  class="rounded-xl cursor-pointer"
+                  :src="authStore.photoProfil"
+              />
+              <a-avatar v-else class="cursor-pointer" src="https://www.antdv.com/assets/logo.1ef800a8.svg" />
             </a>
           </div>
         </nav>

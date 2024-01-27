@@ -1,7 +1,7 @@
 <template>
   <div class="container-login">
     <common-layout>
-      <div class="top">
+      <div class="top login animate__animated animate__fadeIn">
         <div class="pb-4">
           <img src="../../assets/LogoLabel.png" height="25" width="138"/>
         </div>
@@ -9,29 +9,65 @@
           <h1>Login ke Dashboard</h1>
         </div>
         <div style="margin-bottom: 10px; margin-top: 16px; color: grey">Selamat datang! Silahkan isi email kamu</div>
-      </div>
-      <div class="login" style="margin-top: 40px">
-        <a-form>
-          <h4>Login Email</h4>
+        <div>
           <a-form-item>
-              <a-input
-                  autocomplete="autocomplete"
-                  size="large"
-                  placeholder="admin"
-              >
-                <a-icon slot="prefix" type="user" />
-              </a-input>
-            </a-form-item>
-          <a-form-item>
-            <a-button @click="loginAkun" :loading="logging" style="width: 100%;margin-top: 4px" size="large" htmlType="submit" type="primary">Login</a-button>
             <GoogleLogin style="width: 100%" :callback="callback" prompt>
-              <a-button :loading="logging" style="width: 100%;margin-top: 14px" size="large" htmlType="submit" type="primary" ghost>
+              <a-button :loading="logging" style="width: 100%;margin-top: 14px" htmlType="submit" type="primary" ghost>
                 <google-outlined />
                 Login Menggunakan Google
               </a-button>
             </GoogleLogin>
           </a-form-item>
+        </div>
+        <div style="margin-bottom: 10px; margin-top: 16px; color: grey; font-size: small"><a>--------- Atau masuk menggunakan email ---------</a></div>
+        <div v-if="authStore.failedLogin" style="margin-top: 16px; margin-bottom: -20px; color: #ec0808; font-size: small"><a>{{ authStore.failedLogin }}</a></div>
+      </div>
+      <div class="login animate__animated animate__fadeIn" style="margin-top: 20px">
+        <a-form :model="formState" layout="vertical" @finish="loginManual">
+          <a-form-item
+              label="Username atau Email"
+              name="username"
+              :rules="rulesUsername">
+              <a-input
+                  autocomplete="autocomplete"
+                  placeholder="username"
+                  v-model:value="formState.username"
+              >
+                <template #prefix>
+                  <UserOutlined class="site-form-item-icon" />
+                </template>
+              </a-input>
+            </a-form-item>
+          <a-form-item
+              name="password"
+              label="Password"
+              :rules="rulesPassword"
+          >
+            <a-input-password v-model:value="formState.password" placeholder="password">
+              <template #prefix>
+                <LockOutlined class="site-form-item-icon" />
+              </template>
+            </a-input-password>
+          </a-form-item>
+          <a-form-item>
+            <div class="grid grid-cols-6 gap-4 mt-2">
+              <div class="col-start-1 col-end-5">
+                <a-checkbox v-model:checked="checked" >Ingat Perangkat</a-checkbox>
+              </div>
+              <div class="col-end-7 col-span-2 flex justify-end">
+                <a>Lupa Password?</a>
+              </div>
+            </div>
+          </a-form-item>
+          <a-form-item>
+            <a-button :loading="logging" style="width: 100%" html-type="submit" type="primary">Masuk</a-button>
+          </a-form-item>
         </a-form>
+        <div class="top">
+          <div class="mt-4" style="font-size: small">
+            <span>Tidak Memiliki Akun?<a @click="toRegister()" style="color: #2f74f1; cursor: pointer"> Daftar Sekarang.</a></span>
+          </div>
+        </div>
       </div>
     </common-layout>
   </div>
@@ -39,17 +75,29 @@
 
 <script>
 import CommonLayout from '@/components/CommonLayout.vue'
-import { GoogleOutlined } from '@ant-design/icons-vue';
+import { GoogleOutlined, LockOutlined, UserOutlined } from '@ant-design/icons-vue';
 import { GoogleLogin ,decodeCredential } from "vue3-google-login"
-import Axios from 'axios'
+import { useAuthStore } from '@/stores/auth'
 
 export default {
   name: 'Login',
-  components: {CommonLayout, GoogleOutlined, GoogleLogin},
+  components: {CommonLayout, GoogleOutlined, UserOutlined , LockOutlined, GoogleLogin},
+  setup () {
+    const authStore = useAuthStore()
+    return { authStore }
+  },
   data () {
     return {
+      formState : {
+        username: '',
+        password: '',
+        remember: true,
+      },
+      rulesPassword: [{ required: true, message: 'Silahkan ketik password kamu' }],
+      rulesUsername: [{ required: true, message: 'Silahkan ketik username kamu' },],
       logging: false,
       error: '',
+      checked: false,
       user: '',
       callback: (res) => {
         console.log('handle res : ', res)
@@ -60,26 +108,27 @@ export default {
     }
   },
   methods: {
+    toRegister() {
+      this.$router.push("/register")
+    },
     async loginAkun() {
-      const appApi = import.meta.env.VITE_APP_API
       let param = {
         user_email: this.user.email,
         user_name: this.user.name,
-        token_id: this.user.aud,
+        token_id: this.user.sub,
         photo_profil: this.user.picture
       }
-
-      Axios.post(appApi + 'be/api/login', param, {
-        headers: { 'Access-Control-Allow-Origin': '*' }
-      }).then((response) => {
-        console.log(response);
-      }).catch((error) => {
-        console.log(error);
-      });
-
+      await this.authStore.login(param)
       if (this.user) {
         this.$router.push("/undangan")
       }
+    },
+    async loginManual() {
+      let param = {
+        user_name_mail: this.formState.username,
+        password: this.formState.password
+      }
+      await this.authStore.loginManual(param)
     }
   }
 }
