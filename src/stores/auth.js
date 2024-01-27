@@ -29,7 +29,6 @@ export const useAuthStore = defineStore('auth', {
       async login (param) {
          try {
            await Axios.post('be/api/login', param).then(response => {
-               console.log(response);
                this.photoProfil = response.data.data[0].photo_profil
                this.userName = response.data.data[0].user_name
                this.userId = response.data.data[0].user_id

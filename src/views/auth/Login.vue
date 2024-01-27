@@ -120,7 +120,7 @@ export default {
       }
       await this.authStore.login(param)
       if (this.user) {
-        this.$router.push("/undangan")
+        window.location = "/undangan"
       }
     },
     async loginManual() {
