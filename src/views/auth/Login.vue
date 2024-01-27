@@ -100,10 +100,10 @@ export default {
       checked: false,
       user: '',
       callback: (res) => {
-        console.log('handle res : ', res)
+        // console.log('handle res : ', res)
         this.user = decodeCredential(res.credential)
         this.loginAkun()
-        console.log("Handle the userData", this.user)
+        // console.log("Handle the userData", this.user)
       }
     }
   },
@@ -129,6 +129,9 @@ export default {
         password: this.formState.password
       }
       await this.authStore.loginManual(param)
+      if (this.authStore.successLogin) {
+        window.location = "/undangan"
+      }
     }
   }
 }

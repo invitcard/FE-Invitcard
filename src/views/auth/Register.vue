@@ -179,6 +179,9 @@ export default {
       immediate: true // This ensures the watcher is triggered upon creation
     }
   },
+  created() {
+    console.log('asds', this.$route)
+  },
   methods: {
     toLogin() {
       this.authStore.registedPage()

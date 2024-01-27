@@ -19,15 +19,18 @@ export default {
         { name: 'Marketplace', href: '#' },
         { name: 'Company', href: '#' },
       ],
-      mobileMenuOpen: false
+      mobileMenuOpen: false,
+      token: ''
     }
   },
   computed: {
     currentRouteName() {
       this.menuAktif = this.$route.name
-      console.log(this.$route.name)
       return this.$route.name
-    }
+    },
+  },
+  mounted() {
+      this.token = this.authStore.jToken
   },
   methods: {
     changeTab(val) {
@@ -48,8 +51,8 @@ export default {
 </script>
 
 <template>
-  <div v-if="currentRouteName !== 'login' && currentRouteName !== 'register' && currentRouteName !== 'verifikasiEmail' ">
-    <div class="bg-white">
+  <div v-if="currentRouteName !== 'login' && currentRouteName !== 'register' && currentRouteName !== 'verifikasiEmail'">
+    <div class="bg-white" v-if="authStore.jToken !== ''">
       <header class="fixed inset-x-0 top-0 z-50" style="background-color: white">
         <nav class="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
           <div class="flex lg:flex-1">
