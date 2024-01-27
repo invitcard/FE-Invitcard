@@ -8,6 +8,7 @@ export const useAuthStore = defineStore('auth', {
       registed: false,
       verifed: false,
       failedVerifikasi: '',
+      emailRegisted: '',
       userId: 1,
       userEmail: '',
       phone: '',
@@ -99,6 +100,8 @@ export const useAuthStore = defineStore('auth', {
                   this.verifed = true
                } else if (response.data.message === 'Email tidak terdaftar, silakan register terlebih dahulu'){
                   this.failedVerifikasi = response.data.message
+               } else if (response.data.message === 'Email sudah terdaftar. Silakan login'){
+                  this.emailRegisted = response.data.message
                }
             }).catch(error => {
                console.log(error);
